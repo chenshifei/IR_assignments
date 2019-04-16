@@ -102,6 +102,24 @@ Similar to above, we have the other TF/IDF values.
     tf\mhyphen idf_{really, 385} &= 1.834
 \end{align*}
 
+So, if we use these three keywords as the bag-of-words represention of these three documents, we could build vectors with their TF/IDF values like so.
+
+\begin{align*}
+    \vec{v}(d_{72}) &= [3.648, 1.699, 0.917]\\
+    \vec{v}(d_{224}) &= [1.834, 1.699, 0.917]\\
+    \vec{v}(d_{385}) &= [3.648, 1.699, 1.834]
+\end{align*}
+
+And the cosine similarity of each of the two documents are
+
+\begin{align*}
+    sim(d_{72}, d_{224}) &= 0.948\\
+    sim(d_{72}, d_{385}) &= 0.979\\
+    sim(d_{224}, d_{385}) &= 0.956
+\end{align*}
+
+They suggested these documents should be very similar to each other. So after looking at the original document, they did share a few sentences in common. In additon, the sentence ``Well , in sh … school …'' appeared in both document 72 and 385 but not in document 224, which explains why the similarity score between $d_{72}$ and $d_{385}$ was the highest.
+
 \section{Crawler}
 
 I crawled car ads from blocket.se, spcifically the cars from Stockholm for simplicity (looks like it's not banned to do so in their \verb|robots.txt|). The basic process is like find the element I'm intersted in, e.g. the item title, inspect it in Chrome to see what kind of tag it is and what kinds of characters (attributes, css classes, parent tags, etc.) it has.
