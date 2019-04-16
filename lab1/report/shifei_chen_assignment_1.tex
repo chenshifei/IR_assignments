@@ -1,0 +1,111 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% LATEX FORMATTING - LEAVE AS IS %%%%%%%%%%%%%%%%%%%%
+\documentclass[11pt]{article} % documenttype: article
+\usepackage[top=20mm,left=20mm,right=20mm,bottom=15mm,headsep=15pt,footskip=15pt,a4paper]{geometry} % customize margins
+\usepackage{times} % fonttype
+\usepackage{amsmath}
+\makeatletter         
+\def\@maketitle{   % custom maketitle 
+\begin{center}
+{\bfseries \@title}
+{\bfseries \@author}
+\end{center}
+\smallskip \hrule \bigskip }
+
+\mathchardef\mhyphen="2D
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% MAKE CHANGES HERE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{{\LARGE Information Retrivel: Lab 1}\\[1.5mm]} % Replace 'X' by number of Assignment
+\author{Shifei Chen} % Replace 'Firstname Lastname' by your name.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% BEGIN DOCUMENT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% From here on, edit document. Use sections, subsections, etc.
+%%% to structure your answers.
+\begin{document}
+\maketitle
+
+\section{Inverted Index}
+
+The number of dictionary dropped from 4286 to 3684 after lowering cases. This is expected as there were many words in \verb|index.txt| in both their captialized and non-captialized form. The number of postings didn't change and remained at 1000, since we didn't remove any of the words the posting list should be the same.
+
+The postings didn't change after removing the top 10 most frequent words from the index either. It indicated that we have an evenly distributed posting list and the postings didn't cluster around several specific terms. Otherwise the number of postings should be smaller.
+
+\section{Boolean Queries}
+
+I choosed skip pointers as my optimazation to boolean queries and in most cases it reduced the number of comparsions needed in the search. For example for query ``really AND kids AND school'' the program compared 111 times before optimazation. With skip pointers it only needed 56 comparsions. I have also run a few more times with other queries, the result is showed in Table \ref{tab:table1}.
+
+\begin{table}[h]
+    \begin{center}
+        \caption{Number of Comparisons for Different Queries}
+        \label{tab:table1}
+        \begin{tabular}{l|c|c}
+            \textbf{Queries} & \textbf{Without Skip Pointers} & \textbf{With Skip Pointers}\\
+            \hline
+            really AND kids AND school & 111 & 56\\
+            really AND class & 122 & 22\\
+            school AND class & 15 & 9\\
+            you AND me & 916 & 916\\
+            me AND . & 987 & 987\\
+            class AND you & 873 & 89\\
+            me AND class & 381 & 40\\
+            me AND left & 401 & 203\\
+        \end{tabular}
+    \end{center}
+\end{table}
+
+Skip pointers didn't always guranteen a smaller number of comparsions. As the result from ``you AND me'' and ``me AND .'' showed. In both cases, the terms had very frequent words (``you'' and ``.'' were two of the top 10 most frequent words. ``me'' appeared 385 times in the index file, not one of the most frequent words but still quite often). Query ``class AND you'' cost just a little bit more than 1/10 of the original algorithm after optimazation and ``class'' was a rare word in the documents (it only appeared 2 times). In other cases, skip pointers usually saved half of the time in comparsions. The result suggested that if most of the terms were highly frequent in the documents, skip pointers may not appear to be more efficient than the non-optimized version.
+
+Something extra to mention here is that I didn't follow exactly the intersect algorithm with skip pointers as simulating a linked list in Python prefectly is too complicated. I did a simplified version which utilized list index as its pointers.
+
+\section{Ranked Queries}
+
+By definition in order to calculate $tf\mhyphen idf_{t, d}$ of word $t$ and in document $d$, we need to calculate both the term frequency $tf_{t, d}$ of that word $t$ in document $d$ and the inverted docuemnt frequency $idf{t}$ of $t$.
+
+So start with the term frequency for word ``school'' in all three docuements returned by binary search ``school AND kids AND really'', it's easy to obtain the result from \verb=sort -t ' ' -k1,1 -k2,2n | uniq -c=. The first column is the frequency we were looking for.
+
+\begin{align*}
+    tf_{school, 72} &= 2 \\
+    tf_{school, 224} &= 1 \\
+    tf_{school, 385} &= 2
+\end{align*}
+
+Then $df_{school}$ could be found after executing binary search for term ``school'', which was $15$, hence we could get the $idf_{school}$. 
+
+\begin{align*}
+    df_{school} &= 15 \\
+    \begin{split}
+        idf_{school} &= \log{\frac{N}{df_{school}}} \\
+            &= \log{\frac{1000}{15}} \\
+            &= 1.824
+    \end{split}
+\end{align*}
+
+Finally following the definition we could get the $tf\mhyphen idf{t, d}$ for term ``school'' in all three documents.
+
+\begin{align*}
+    \begin{split}
+        tf\mhyphen idf_{school, 72} &= tf_{school, 72} * idf_{school} \\
+            &= 2 * 1.824 \\
+            &= 3.648
+    \end{split}\\
+    tf\mhyphen idf_{school, 224} &= 1.824 \\
+    tf\mhyphen idf_{school, 385} &= 3.648
+\end{align*}
+
+Similar to above, we have the other TF/IDF values.
+
+\begin{align*}
+    tf\mhyphen idf_{kids, 72} &= tf\mhyphen idf_{kids, 224} = tf\mhyphen idf_{kids, 385} = 1.699 \\
+    tf\mhyphen idf_{really, 72} &= tf\mhyphen idf_{really, 224} = 0.917 \\
+    tf\mhyphen idf_{really, 385} &= 1.834
+\end{align*}
+
+\section{Crawler}
+
+I crawled car ads from blocket.se, spcifically the cars from Stockholm for simplicity (looks like it's not banned to do so in their \verb|robots.txt|). The basic process is like find the element I'm intersted in, e.g. the item title, inspect it in Chrome to see what kind of tag it is and what kinds of characters (attributes, css classes, parent tags, etc.) it has.
+
+One thing worth to mention is that some of the attributes inside the tags were not standard html attributes, for example \verb|itemprop|. And sometimes these attributes can hold multiple values. It looks like BeautifulSoup didn't support extracting multiple values from customized attributes, unlike standard attributes such as \verb|class|. Therefore I ended up with regular expressions.
+
+\end{document}
