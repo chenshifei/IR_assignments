@@ -1,0 +1,121 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% LATEX FORMATTING - LEAVE AS IS %%%%%%%%%%%%%%%%%%%%
+\documentclass[11pt]{article} % documenttype: article
+\usepackage[top=20mm,left=20mm,right=20mm,bottom=15mm,headsep=15pt,footskip=15pt,a4paper]{geometry} % customize margins
+\usepackage{times} % fonttype
+\usepackage{amsmath}
+\makeatletter         
+\def\@maketitle{   % custom maketitle 
+\begin{center}
+{\bfseries \@title}
+{\bfseries \@author}
+\end{center}
+\smallskip \hrule \bigskip }
+
+\mathchardef\mhyphen="2D
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% MAKE CHANGES HERE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{{\LARGE Information Retrivel: Assignment 3}\\[1.5mm]} % Replace 'X' by number of Assignment
+\author{Shifei Chen} % Replace 'Firstname Lastname' by your name.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% BEGIN DOCUMENT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% From here on, edit document. Use sections, subsections, etc.
+%%% to structure your answers.
+\begin{document}
+\maketitle
+
+\section*{Exercise 8.8}
+
+\subsection*{a}
+
+In the first system we have $|Q|=1$ and $m_j=4$. There were 4 relevant results and the 4 $R_{jk}$s are
+
+\begin{align*}
+    R_{j1} &= {R}\\
+    R_{j2} &= {RNR}\\
+    R_{j3} &= {RNRNN NNNR}\\
+    R_{j4} &= {RNRNN NNNRR}\\
+\end{align*}
+
+which leads to their precisions
+
+\begin{align*}
+    Precison(R_{j1}) &= 1/1 = 1\\
+    Precison(R_{j2}) &= 2/3 = 0.667\\
+    Precison(R_{j3}) &= 3/9 = 0.333\\
+    Precison(R_{j4}) &= 4/10 = 0.4\\
+\end{align*}
+
+Then plugging the numbers into the formula $$MAP(Q) = \frac{1}{|Q|}\sum_{j=1}^{|Q|}\frac{1}{m_j}\sum_{k=1}{m_j}Precision(R_{jk})$$, we have $1/4*(1+0.667+0.333+0.4) = 0.6$
+
+The second system we have $1/4*(1/2+2/5+3/6+4/7) = 0.493$. So system 1 has a higher MAP value.
+
+\subsection*{b}
+
+The result from part a makes sense as system 1 hit the relevant document in the first query. From the formula we can also see that to get the maxium score it's important to hit all relevant docuemnts as early as possible, hence the user can get his information in the first or second lines from the result list.
+
+\section*{8.10}
+
+\subsection*{a}
+
+\begin{table}[h]
+    \begin{center}
+        \begin{tabular}{r|c|c|c|}
+            \textbf{} & \textbf{Judge 2 Yes} & \textbf{Judge 2 No} & \textbf{Total}\\
+            \hline
+            \textbf{Judge 1 Yes} & 2 & 4 & 6\\
+            \textbf{Judge 1 No} & 4 & 2 & 6\\
+            \textbf{Total} & 6 & 6 & 12\\
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\begin{align*}
+    P(A) = (2+2)/12 = 0.333\\
+    P(relevant) = (6 + 6)/(12 + 12) = 0.5\\
+    P(nonrelevan) = (6 + 6)/(12 + 12) = 0.5\\
+    P(E) = P(n)^2 + P(r)^2 = 0.5\\
+    Kappa = \frac{P(A) - P(E)}{1 - P(E)} = -0.333
+\end{align*}
+
+\subsection*{b}
+
+\begin{table}[h]
+    \begin{center}
+        \begin{tabular}{r|c|c|}
+            & \textbf{Relevant} & \textbf{Nonrevalant}\\
+            \hline
+            \textbf{Retrived} & 1 & 4\\
+            \textbf{Not Retrived} & 1 & 6\\
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\begin{align*}
+    precision &= 1/(1+4) = 0.2\\
+    recall &= 1/(1+1) = 0.5\\
+    F1 &= 2*0.2*0.5/(0.2+0.5) = 0.286
+\end{align*}
+
+\subsection*{c}
+
+\begin{table}[h]
+    \begin{center}
+        \begin{tabular}{r|c|c|}
+            & \textbf{Relevant} & \textbf{Nonrevalant}\\
+            \hline
+            \textbf{Retrived} & 5 & 0\\
+            \textbf{Not Retrived} & 5 & 2\\
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\begin{align*}
+    precision &= 5/(5+0) = 1\\
+    recall &= 5/(5+5) = 0.5\\
+    F1 &= 2*1*0.5/(1+0.5) = 0.667
+\end{align*}
+
+\end{document}
