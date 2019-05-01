@@ -1,0 +1,47 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% LATEX FORMATTING - LEAVE AS IS %%%%%%%%%%%%%%%%%%%%
+\documentclass[11pt]{article} % documenttype: article
+\usepackage[top=20mm,left=20mm,right=20mm,bottom=15mm,headsep=15pt,footskip=15pt,a4paper]{geometry} % customize margins
+\usepackage{times} % fonttype
+\usepackage{amsmath}
+\makeatletter         
+\def\@maketitle{   % custom maketitle 
+\begin{center}
+{\bfseries \@title}
+{\bfseries \@author}
+\end{center}
+\smallskip \hrule \bigskip }
+
+\mathchardef\mhyphen="2D
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% MAKE CHANGES HERE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{{\LARGE Information Retrivel: Assignment 4}\\[1.5mm]} % Replace 'X' by number of Assignment
+\author{Shifei Chen} % Replace 'Firstname Lastname' by your name.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% BEGIN DOCUMENT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% From here on, edit document. Use sections, subsections, etc.
+%%% to structure your answers.
+\begin{document}
+\maketitle
+
+\section*{Exercise 9.1}
+
+The $\alpha$ should be 1 as the original query is still valueable in the feedback. $\beta$ can be a value slightly larger than $\alpha$ as the relevant document is something we would like to see more in the next result, such as 1.1. $\gamma=0$ as we do not want any non-relevant document next time.
+
+\section{Exercise 9.2}
+
+1. Users generally don't give any feedbacks, which makes it difficult to apply relevant feedback strategy.
+2. The cost to provide relevant feedback for long query terms is high.
+3. Web users care less about recall enhancing in general.
+
+\section{Exercise 9.3}
+
+When $\alpha=1, \beta=\gamma=0$, the orignal query will be identical to the revised query. But it does not always guranteen the revised query will always be closer to the relevant document. If $\gamma$ is larger than $\beta$ I believe the algorithm will penalize non-relevant documents more than award relevant document and pushes the query vector more away.
+
+\section{Exercise 9.4}
+
+The assumption is all of the relevant documents are clustered together and the  non-relevant documents are sparsely located in the document set, hence it is much easier to find a clear centroid in the relevant docuemnts and award it than finding the centroid in the non-relevant documents. Also non-relevant documents could be differernt in many ways and the sum of their vectors could be zero in some edge cases. In that situation, the effect of penalize non-relevant docuemtns would be eliminated so to keep polarising our optimized vectors away from the non-relevant documents it is reasonable to only take 1 non-relevant document into consideration.
+
+\end{document}
