@@ -37,7 +37,7 @@ def p_at_k_score(query_results, k):
         for d in documents[:k]:
             if qrel[d] > 0:
                 precision += 1
-        precision = precision / len(documents)
+        precision = precision / k
         result[qid] = precision
     return result
 
