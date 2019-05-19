@@ -1,0 +1,133 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% LATEX FORMATTING - LEAVE AS IS %%%%%%%%%%%%%%%%%%%%
+\documentclass[11pt]{article} % documenttype: article
+\usepackage[top=20mm,left=20mm,right=20mm,bottom=15mm,headsep=15pt,footskip=15pt,a4paper]{geometry} % customize margins
+\usepackage{times} % fonttype
+\usepackage{graphicx}
+\graphicspath{ {../images/} }
+
+\makeatletter         
+\def\@maketitle{   % custom maketitle 
+\begin{center}
+{\bfseries \@title}
+{\bfseries \@author}
+\end{center}
+\smallskip \hrule \bigskip }
+
+\mathchardef\mhyphen="2D
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% MAKE CHANGES HERE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{{\LARGE Information Retrieval: Lab 3}\\[1.5mm]} % Replace 'X' by number of Assignment
+\author{Shifei Chen} % Replace 'Firstname Lastname' by your name.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% BEGIN DOCUMENT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% From here on, edit document. Use sections, subsections, etc.
+%%% to structure your answers.
+\begin{document}
+\maketitle
+
+\section{P@k}
+
+Below are the P@10 score for both the original corpus and the decomposed corpus.
+
+\begin{table}[h]
+    \begin{center}
+        \begin{tabular}{c|c|c|}
+            \textbf{Query ID} & \textbf{P@10 Original} & \textbf(P@10 Decomposed) \\
+            \hline
+            1   & 0.1               & 0.09 \\
+            2   & 0.04              & 0.04 \\
+            4   & 0.1               & 0.1  \\
+            5   & 0.1               & 0.09 \\
+            7   & 0.1               & 0.05 \\
+            9   & 0.01              & 0.02 \\
+            10  & 0.05              & 0.08 \\
+            11  & 0.07              & 0.07 \\
+            12  & 0.06              & 0.08 \\
+            13  & 0.06              & 0.06 \\
+            16  & 0.1               & 0.07 \\
+            18  & 0.04              & 0.02 \\
+            19  & 0.06              & 0.03 \\
+            20  & 0.06              & 0.05 \\
+            21  & 0.01              & 0    \\
+            23  & 0.09              & 0.08 \\
+            25  & 0.09              & 0.1  \\
+            26  & 0.03              & 0    \\
+            27  & 0.05              & 0.05 \\
+            28  & 0.1               & 0.07 \\
+            31  & 0.05              & 0.04 \\
+            32  & 0.05              & 0.05 \\
+            36  & 0.06              & 0.07 \\
+            37  & 0.06              & 0    \\
+            38  & 0.03              & 0.06 \\
+            39  & 0.08              & 0.08 \\
+            41  & 0.09              & 0.1  \\
+            42  & 0.07              & 0.07 \\
+            43  & 0.04              & 0.02 \\
+            44  & 0.07              & 0.05 \\
+            46  & 0.06              & 0.01 \\
+            49  & 0.04              & 0.02 \\
+            50  & 0.09              & 0.08 \\
+            51  & 0.1               & 0.1  \\
+            53  & 0.09              & 0.09 \\
+            54  & 0.07              & 0.03 \\
+            55  & 0.08              & 0.08 \\
+            58  & 0.06              & 0.09 \\
+            62  & 0.08              & 0.08 \\
+            63  & 0.02              & 0.03 \\
+            65  & 0.09              & 0.09 \\
+            66  & 0.05              & 0.05 \\
+            67  & 0.05              & 0.06 \\
+            68  & 0.1               & 0.1  \\
+            69  & 0.07              & 0.06 \\
+            73  & 0.07              & 0.08 \\
+            75  & 0.01              & 0.01 \\
+            76  & 0.02              & 0.01 \\
+            77  & 0.08              & 0.05 \\
+            82  & 0.06              & 0.04 \\
+        \end{tabular}
+        \caption{P@10 Score for the Original and Decomposed Corpus}
+    \end{center}
+\end{table}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{p_at_10.png}
+    \caption{P@10 Score for the Original and Decomposed Corpus}
+\end{figure}
+
+Some of the precision scores were higher in the original corpus, but there are still some that were higher in the decomposed corpus. In general, those whose title contain compounds are more likely to gain from the decomposed corpus, such as topic 10 ``Att behandla med xenical vid samtidig diabetes och/eller högt blodtryck''. ``blodtryck'' is a compound means ``blood pressure'' in English so it makes sense that doing a query with \verb|#combine(bold tryck)| should match more articles. But anyway, the overall precision score when $k=10$ is still very low. No one exceeds 0.1.
+
+\begin{table}[h]
+    \begin{center}
+        \begin{tabular}{c|c|c|}
+            \textbf{K} & \textbf{Precision Origianl} & \textbf{Precision Decomposed} \\
+            \hline
+            1  & 0.01 & 0.01 \\
+            2  & 0.02 & 0.02 \\
+            3  & 0.03 & 0.03 \\
+            4  & 0.04 & 0.04 \\
+            5  & 0.05 & 0.05 \\
+            6  & 0.06 & 0.05 \\
+            7  & 0.07 & 0.06 \\
+            8  & 0.08 & 0.07 \\
+            9  & 0.09 & 0.08 \\
+            10  & 0.1 & 0.09 \\
+            20  & 0.18 & 0.17 \\
+            30  & 0.258 & 0.25 \\
+            50  & 0.36 & 0.35 \\
+            100  & 0.57 & 0.56 \\
+        \end{tabular}
+        \label{tab_k_value}
+        \caption{Precision Scores for Topic 1 at Different $K$}
+    \end{center}
+\end{table}
+
+Table \ref{tab_k_value} shows the effect of different K values. As we see the higher the k is the higher the precision score is. This is reasonable since there should be more relevant articles as our result set grows.
+
+\section{MAP}
+The MAP score on the decomposed compound set is slightly worse at 0.402, about 0.04 lower than the one on the regular document set. This can be attributed to the fact that the titles from the topic file were not decomposed, plus the \verb|#combine()| operator matches the whole word for compound words instead of their components.
+
+\end{document}
