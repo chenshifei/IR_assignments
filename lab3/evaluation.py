@@ -6,7 +6,8 @@ from collections import defaultdict
 
 parser = argparse.ArgumentParser(description='A Helper for Evaluating Indri Queries')
 parser.add_argument('qresult', help='The result file from running IndriRunQuery')
-parser.add_argument('-k', default=10, type=int, help='The K number for the P@K score, default=10')
+parser.add_argument('-k' ,'--k', default=10, type=int, help='The K number for the P@K score, default=10')
+parser.add_argument('-o', '--output', help='The name for the output csv file')
 
 ARGS = parser.parse_args()
 QRELS_PATH = '/local/course/ir/data/MedEvalTK/None'
@@ -65,12 +66,13 @@ def map_score(query_results):
     result /= query_length
     return result
 
-def print_scores(p_at_k, map_result, k):
+def print_scores(p_at_k, map_result, k, csvfile=None):
     print('Results for {} queries:\n'.format(len(p_at_k)))
 
     print('P@{} scores'.format(k))
     print('====================================')
-    for qid in sorted(p_at_k.keys(), key=int):
+    sorted_qids = sorted(p_at_k.keys(), key=int)
+    for qid in sorted_qids:
         print('Query id {}:\tP@{}={:.3f}'.format(qid, k, p_at_k[qid]))
     print()
 
@@ -78,8 +80,16 @@ def print_scores(p_at_k, map_result, k):
     print('====================================')
     print('MAP={:.3f}'.format(map_result))
 
+    if csvfile:
+        with open(csvfile, 'w') as f:
+            writer = csv.writer(f)
+            writer.writerow(['qid', 'value', 'note'])
+            for qid in sorted_qids:
+                writer.writerow([str(qid), str(p_at_k[qid]), 'k={}'.format(k)])
+            writer.writerow(['map', str(map_result)])
+
 if __name__ == "__main__":
     results = read_results_file(ARGS.qresult)
     p = p_at_k_score(results, ARGS.k)
     m = map_score(results)
-    print_scores(p, m, ARGS.k)
+    print_scores(p, m, ARGS.k, ARGS.output)
